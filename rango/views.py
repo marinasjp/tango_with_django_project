@@ -21,7 +21,8 @@ def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
     page_list = Page.objects.order_by('-views')[:5]
 
-    context_dict = {'boldmessage': 'Crunchy, creamy, cookie, candy, cupcake!', 'categories': category_list, 'pages': page_list}
+    context_dict = {'boldmessage': 'Crunchy, creamy, cookie, candy, cupcake!', 'categories': category_list,
+                    'pages': page_list}
 
     # Render the response and send it back!
     return render(request, 'rango/index.html', context=context_dict)
@@ -65,6 +66,7 @@ def show_category(request, category_name_slug):
     return render(request, 'rango/category.html', context=context_dict)
 
 
+@login_required
 def add_category(request):
     form = CategoryForm()
 
@@ -89,6 +91,7 @@ def add_category(request):
     return render(request, 'rango/add_category.html', {'form': form})
 
 
+@login_required
 def add_page(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
@@ -167,7 +170,7 @@ def register(request):
 
     # Render the template depending on the context.
     return render(request, 'rango/register.html', context={'user_form': user_form, 'profile_form': profile_form,
-                           'registered': registered})
+                                                           'registered': registered})
 
 
 def user_login(request):
@@ -210,7 +213,7 @@ def user_login(request):
 
 @login_required
 def restricted(request):
-    return HttpResponse("Since you're logged in, you can see this text!")
+    return render(request, 'rango/restricted.html')
 
 
 @login_required
